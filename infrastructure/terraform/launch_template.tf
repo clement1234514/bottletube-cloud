@@ -12,4 +12,18 @@ resource "aws_launch_template" "bottletube" {
   lifecycle {
     create_before_destroy = true
   }
+metadata_options {
+  http_tokens = "required"
+}
+
+tag_specifications {
+  resource_type = "instance"
+
+  tags = {
+    S3_BUCKET       = aws_s3_bucket.bottletube.bucket
+    DB_HOST         = aws_db_instance.bottletube.address
+    DB_SECRET_NAME  = aws_secretsmanager_secret.db.name
+    AWS_REGION      = var.region
+  }
+}
 }
